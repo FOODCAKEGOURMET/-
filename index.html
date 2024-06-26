@@ -69,7 +69,7 @@
 </head>
 <body>
     <div class="container">
-        <h3>Calculadora de Calorias Diárias, Taxa de Perda de Peso e IMC</h3>
+        <h1>Calculadora de Calorias Diárias, Taxa de Perda de Peso e IMC</h1>
         <form id="calculadoraForm">
             <label for="sexo">Sexo:</label>
             <select id="sexo" name="sexo">
@@ -83,7 +83,7 @@
             <label for="peso">Peso atual (kg):</label>
             <input type="number" id="peso" name="peso" step="0.1" required>
 
-            <label for="altura">Altura (m) "ex 1.80" :</label>
+            <label for="altura">Altura (m):</label>
             <input type="number" id="altura" name="altura" step="0.01" required>
             
             <label for="metaPeso">Meta de peso a perder (kg):</label>
@@ -143,11 +143,17 @@
                 esbocoHumano = '<img src="https://thumbs.dreamstime.com/b/anatomia-muscular-f%C3%AAmea-do-sistema-51405110.jpg" alt="Esboço do corpo feminino">';
             }
             
+            // Calcular quanto perder para atingir o IMC desejado
+            var imcDesejado = 22.5; // Exemplo de IMC desejado
+            var pesoParaIMCDesejado = imcDesejado * Math.pow(altura, 2);
+            var perderParaIMC = peso - pesoParaIMCDesejado;
+            
             document.getElementById('resultado').innerHTML = '<h3>Resultado:</h3>' +
                 '<p>Para perder aproximadamente ' + metaPeso + ' kg até ' + dataFinal.toLocaleDateString('pt-BR') + ',' +
                 ' você deve consumir aproximadamente ' + caloriasDiarias.toFixed(0) + ' calorias por dia.</p>' +
                 '<p>Em média, você precisa perder ' + taxaPerdaSemanal.toFixed(2) + ' kg por semana.</p>' +
-                '<p>Seu IMC atual é ' + imc.toFixed(1) + ', o que indica que você está ' + mensagemIMC + '.</p>';
+                '<p>Seu IMC atual é ' + imc.toFixed(1) + ', o que indica que você está ' + mensagemIMC + '.</p>' +
+                '<p>Para atingir um IMC de ' + imcDesejado.toFixed(1) + ', você precisa perder aproximadamente ' + perderParaIMC.toFixed(1) + ' kg.</p>';
             
             document.getElementById('esbocoHumano').innerHTML = esbocoHumano;
         }
