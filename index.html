@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Calorias Diárias, Taxa de Perda de Peso e IMC</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        font-size: 18px;
+        display: flex;
+        justify-content: center; /* Centraliza horizontalmente */
+        align-items: flex-start; /* Alinha ao topo */
+        min-height: 100vh; /* Altura mínima da viewport */
+        background-color: #f0f0f0;
+    }
+    .container {
+        width: 100%;
+        max-width: 600px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        text-align: center;
+    }
+    form {
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="number"], input[type="date"], select {
+        width: calc(100% - 12px); /* Ajusta para compensar o padding */
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        width: 100%;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    #resultado {
+        margin-top: 15px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .esboco {
+        text-align: center;
+        margin-top: 15px;
+    }
+    .esboco img {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Calorias Diárias, Taxa de Perda de Peso e IMC</h1>
+        <form id="calculadoraForm">
+            <label for="sexo">Sexo:</label>
+            <select id="sexo" name="sexo">
+                <option value="m">Masculino</option>
+                <option value="f">Feminino</option>
+            </select>
+
+            <label for="idade">Idade:</label>
+            <input type="number" id="idade" name="idade" min="1" required>
+
+            <label for="peso">Peso atual (kg):</label>
+            <input type="number" id="peso" name="peso" step="0.1" required>
+
+            <label for="altura">Altura (m):</label>
+            <input type="number" id="altura" name="altura" step="0.01" required>
+            
+            <label for="metaPeso">Meta de peso a perder (kg):</label>
+            <input type="number" id="metaPeso" name="metaPeso" step="0.1" required>
+            
+            <label for="dataFinal">Data final (dd/mm/aaaa):</label>
+            <input type="date" id="dataFinal" name="dataFinal" required>
+            
+            <button type="button" onclick="calcular()">Calcular</button>
+        </form>
+        
+        <div id="resultado"></div>
+    
+        <div class="esboco" id="esbocoHumano">
+            <!-- Imagem do esboço humano será inserida aqui -->
+        </div>
+    </div>
+
+    <script>
+        function calcular() {
+            var sexo = document.getElementById('sexo').value;
+            var idade = parseInt(document.getElementById('idade').value);
+            var peso = parseFloat(document.getElementById('peso').value);
+            var altura = parseFloat(document.getElementById('altura').value);
+            var metaPeso = parseFloat(document.getElementById('metaPeso').value);
+            var dataFinal = new Date(document.getElementById('dataFinal').value);
+            var hoje = new Date();
+            var diasRestantes = Math.ceil((dataFinal - hoje) / (1000 * 60 * 60 * 24));
+            
+            if (idade <= 0 || peso <= 0 || altura <= 0 || metaPeso <= 0 || diasRestantes <= 0) {
+                alert('Por favor, preencha os campos corretamente.');
+                return;
+            }
+            
+            var semanasRestantes = Math.ceil(diasRestantes / 7);
+            var taxaPerdaSemanal = metaPeso / semanasRestantes;
+            var caloriasDiarias = 7700 * taxaPerdaSemanal;
+            
+            var imc = peso / Math.pow(altura, 2);
+            var pesoIdeal = calcularPesoIdeal(sexo, idade, altura);
+            
+            var mensagemIMC = '';
+            if (imc < 18.5) {
+                mensagemIMC = 'Abaixo do peso';
+            } else if (imc >= 18.5 && imc < 25) {
+                mensagemIMC = 'Peso normal';
+            } else if (imc >= 25 && imc < 30) {
+                mensagemIMC = 'Sobrepeso';
+            } else {
+                mensagemIMC = 'Obesidade';
+            }
+            
+            var esbocoHumano = '';
+            if (sexo === 'm') {
+                esbocoHumano = '<img src="https://s1.static.brasilescola.uol.com.br/be/conteudo/images/sistema-muscular.jpg" alt="Esboço do corpo masculino">';
+            } else {
+                esbocoHumano = '<img src="https://thumbs.dreamstime.com/b/anatomia-muscular-f%C3%AAmea-do-sistema-51405110.jpg" alt="Esboço do corpo feminino">';
+            }
+            
+            document.getElementById('resultado').innerHTML = '<h3>Resultado:</h3>' +
+                '<p>Para perder aproximadamente ' + metaPeso + ' kg até ' + dataFinal.toLocaleDateString('pt-BR') + ',' +
+                ' você deve consumir aproximadamente ' + caloriasDiarias.toFixed(0) + ' calorias por dia.</p>' +
+                '<p>Em média, você precisa perder ' + taxaPerdaSemanal.toFixed(2) + ' kg por semana.</p>' +
+                '<p>Seu IMC atual é ' + imc.toFixed(1) + ', o que indica que você está ' + mensagemIMC + '.</p>';
+            
+            document.getElementById('esbocoHumano').innerHTML = esbocoHumano;
+        }
+        
+        function calcularPesoIdeal(sexo, idade, altura) {
+            var pesoIdeal = 0;
+            if (sexo === 'm') {
+                pesoIdeal = 50 + 0.75 * (altura - 1.5) * 100 - 0.25 * (idade - 20);
+            } else {
+                pesoIdeal = 45.5 + 0.65 * (altura - 1.5) * 100 - 0.2 * (idade - 20);
+            }
+            return pesoIdeal;
+        }
+    </script>
+</body>
+</html>
