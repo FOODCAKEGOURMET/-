@@ -17,15 +17,20 @@
         min-height: 100vh; /* Altura mínima da viewport */
         background-image: linear-gradient(45deg, #C1C8D4, #072739);
 		color: white;
+		
     }
     .container {
         width: 100%;
         max-width: 400px;
         background-color: #fff;
-        padding: 20px;
+        padding: 50px;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 		background-image: linear-gradient(45deg, #C1C8D4, #072739);
+		top: 50%;
+		left: 50%;
+		
+		
     }
     h1 {
         text-align: center;
@@ -78,7 +83,7 @@
 </head>
 <body>
     <div class="container">
-        <h3>Calculadora de Calorias Diárias, Taxa de Perda de Peso e IMC</h3>
+        <center><h3>Calculadora de Calorias Diárias, Taxa de Perda de Peso e IMC</h3></center>
         <form id="calculadoraForm">
             
             <select id="sexo" name="sexo">
@@ -147,9 +152,9 @@
             
             var esbocoHumano = '';
             if (sexo === 'm') {
-                esbocoHumano = '<img src="https://s1.static.brasilescola.uol.com.br/be/conteudo/images/sistema-muscular.jpg" alt="Esboço do corpo masculino">';
+                esbocoHumano = '<img src="homem.png" alt="Esboço do corpo masculino">';
             } else {
-                esbocoHumano = '<img src="https://thumbs.dreamstime.com/b/anatomia-muscular-f%C3%AAmea-do-sistema-51405110.jpg" alt="Esboço do corpo feminino">';
+                esbocoHumano = '<img src="mulher.png" alt="Esboço do corpo feminino">';
             }
             
             // Calcular quanto perder para atingir o IMC desejado
