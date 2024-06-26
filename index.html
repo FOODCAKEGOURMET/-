@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadora de Calorias Diárias, Taxa de Perda de Peso e IMC</title>
 <style>
-    body {
+    body 
+	
+	{
         font-family: Arial, sans-serif;
         padding: 20px;
         font-size: 18px;
@@ -13,15 +15,17 @@
         justify-content: center; /* Centraliza horizontalmente */
         align-items: flex-start; /* Alinha ao topo */
         min-height: 100vh; /* Altura mínima da viewport */
-        background-color: #f0f0f0;
+        background-image: linear-gradient(45deg, #C1C8D4, #072739);
+		color: white;
     }
     .container {
         width: 100%;
-        max-width: 600px;
+        max-width: 400px;
         background-color: #fff;
         padding: 20px;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		background-image: linear-gradient(45deg, #C1C8D4, #072739);
     }
     h1 {
         text-align: center;
@@ -36,26 +40,29 @@
     input[type="number"], input[type="date"], select {
         width: calc(100% - 12px); /* Ajusta para compensar o padding */
         padding: 8px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         box-sizing: border-box;
+		border-radius: 5px;
+		font-size: 15px;
     }
     button {
-        background-color: YELLOW-GOLD;
+        background-color: #072739;
         color: white;
         padding: 10px 15px;
         border: none;
         cursor: pointer;
         border-radius: 5px;
-        width: 100%;
+        width: 98%;
     }
     button:hover {
-        background-color: #45a049;
+        background-color: #C1C8D4;
     }
     #resultado {
         margin-top: 15px;
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
+		width: 93%;
     }
     .esboco {
         text-align: center;
@@ -69,28 +76,28 @@
 </head>
 <body>
     <div class="container">
-        <h1>Calculadora de Calorias Diárias, Taxa de Perda de Peso e IMC</h1>
+        <h3>Calculadora de Calorias Diárias, Taxa de Perda de Peso e IMC</h3>
         <form id="calculadoraForm">
-            <label for="sexo">Sexo:</label>
+            
             <select id="sexo" name="sexo">
                 <option value="m">Masculino</option>
                 <option value="f">Feminino</option>
             </select>
 
-            <label for="idade">Idade:</label>
-            <input type="number" id="idade" name="idade" min="1" required>
-
-            <label for="peso">Peso atual (kg):</label>
-            <input type="number" id="peso" name="peso" step="0.1" required>
-
-            <label for="altura">Altura (m) ex "1.80" :</label>
-            <input type="number" id="altura" name="altura" step="0.01" required>
             
-            <label for="metaPeso">Meta de peso a perder (kg):</label>
-            <input type="number" id="metaPeso" name="metaPeso" step="0.1" required>
+            <input type="number" id="idade" placeholder="Idade:" name="idade" min="1" required>
+
             
-            <label for="dataFinal">Data final (dd/mm/aaaa):</label>
-            <input type="date" id="dataFinal" name="dataFinal" required>
+            <input type="number" id="peso" placeholder="Peso:" name="peso" step="0.1" required>
+
+            
+            <input type="number" id="altura" placeholder="Altura (m)  Ex: 1.80 :" name="altura" step="0.01" required>
+            
+            
+            <input type="number" id="metaPeso" placeholder="Meta de peso a perder (kg):"  name="metaPeso" step="0.1" required>
+            
+            
+            <input type="date" id="dataFinal" placeholder="Data final"  name="dataFinal" required>
             
             <button type="button" onclick="calcular()">Calcular</button>
         </form>
@@ -169,4 +176,5 @@
         }
     </script>
 </body>
+
 </html>
