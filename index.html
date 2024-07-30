@@ -105,7 +105,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="LOGO.png" alt="Logo">
+            <img src="LOGO.PNG" alt="Logo">
         </div>
         <h1>FOOD CAKE GOURMET</h1>
         <form id="calculator">
@@ -116,27 +116,25 @@
         <div class="result">
             <div class="card">
                 <h2>Custo Total</h2>
-                <p id="custoTotal"></p>
+                <p id="custoTotal"style="font-size: 25px; color: red;"></p>
             
             <div class="divider"></div>
                 <h2>Lucro Total</h2>
-                <p id="lucroTotal"></p>
+                <p id="lucroTotal" style="font-size: 25px; color: red;"></p>
             </div>
             <div class="divider"></div>
             <div class="card">
-                <h2>Quantidade de Materiais Necessários</h2>
+                 <h2>Ingredientes <span id="totalMateriais" style="font-size: 20px; color: red;"></span></h2>
                 <p id="materiaisNecessarios"></p>
-            
-            <div class="divider"></div>
-            
-                <h2>Custos Extras</h2>
+                <div class="divider"></div>
+                <h2>Custos Extras <span id="totalCustosExtras" style="font-size: 20px; color: red;"></span></h2>
                 <p id="custosExtras"></p>
             </div>
         </div>
     </div>
 </div>
     <script>
-        function calculate() {
+         function calculate() {
             const numPotes = parseInt(document.getElementById('numPotes').value);
 
             // Dados
@@ -148,19 +146,19 @@
 
             // Quantidades dos materiais para 35 potes
             const quantidadeMateriais = {
-                leite: { quantidade: 3, precoUnitario: 5.00 },     // Litros
-                manteiga: { quantidade: 1, precoUnitario: 3.00 }, // Unidades (em pacotes)
-                massaTapioca: { quantidade: 2, precoUnitario: 11.50 }, // Pacotes
-                cocoSeco: { quantidade: 2, precoUnitario: 3.50 }, // Pacotes
-                açúcar: { quantidade: 0.24, precoUnitario: 4.50 }, // Kg
-                cocoRalado: { quantidade: 2, precoUnitario: 5.00 } // Pacotes
+                leite: { quantidade: 3, precoUnitario: 5.00 },
+                manteiga: { quantidade: 1, precoUnitario: 3.00 },
+                massaTapioca: { quantidade: 2, precoUnitario: 11.50 },
+                cocoSeco: { quantidade: 2, precoUnitario: 3.50 },
+                açúcar: { quantidade: 0.24, precoUnitario: 4.50 },
+                cocoRalado: { quantidade: 2, precoUnitario: 5.00 }
             };
 
             // Custos extras por unidade
             const custosExtras = {
                 colher: 0.04,
                 guardanapo: 0.01,
-                saquinho: 0.09,
+                saquinho: 0.02,
                 pote: 0.77,
                 etiquetas: 0.09,
                 sacolinha: 0.03
@@ -204,6 +202,12 @@
                 sacolinha: custosExtras.sacolinha * numPotes
             };
 
+            // Total de materiais
+            const totalMateriais = Object.values(custosMateriais).reduce((acc, valor) => acc + valor, 0);
+
+            // Total de custos extras
+            const totalCustosExtras = Object.values(custosExtrasTotal).reduce((acc, valor) => acc + valor, 0);
+
             // Exibir resultados
             document.getElementById('custoTotal').innerText = `R$ ${custoTotal.toFixed(2)}`;
             document.getElementById('lucroTotal').innerText = `R$ ${lucroTotal.toFixed(2)}`;
@@ -231,6 +235,10 @@
                     <li>Sacolinha Plástica: R$ ${custosExtrasTotal.sacolinha.toFixed(2)}</li>
                 </ul>
             `;
+
+            // Exibir totais
+            document.getElementById('totalMateriais').innerText = `Total: R$ ${totalMateriais.toFixed(2)}`;
+            document.getElementById('totalCustosExtras').innerText = `Total: R$ ${totalCustosExtras.toFixed(2)}`;
         }
     </script>
 </body>
