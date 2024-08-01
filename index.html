@@ -9,17 +9,19 @@
             display: flex;
             justify-content: center;
             height: calc(100vh - 20px); /* Ajusta a altura para compensar a margem */
-            align-items:center;
-		    padding: 8.5%
+            align-items: center;
+            padding: 8.5%;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
         .container {
-		    margin-top: 1%;
+            margin-top: 1%;
             max-width: 800px;
             width: 100%;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
-            padding: 20px;
+            padding: 5px;
             box-sizing: border-box;
         }
         .logo {
@@ -40,22 +42,33 @@
             flex-direction: column;
             align-items: center;
         }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 500px;
+        }
         label {
-            margin-bottom: 5px;
+            margin-right: 10px;
             font-size: 14px;
             color: #555;
         }
-        input {
+        select, input {
             padding: 10px;
-            width: 100%;
-            max-width: 97%;
             border: 1px solid #ccc;
             border-radius: 4px;
-            margin-bottom: 15px;
             font-size: 14px;
         }
+        select {
+            width: 150px;
+            margin-right: 10px;
+        }
+        input {
+            width: calc(100% - 160px); /* Ajuste para deixar espaço para o select */
+        }
         button {
-		    width: 100%;
+            width: 100%;
             padding: 10px 20px;
             background-color: #111;
             color: #fff;
@@ -67,22 +80,27 @@
         }
         button:hover {
             background-color: #666;
-			color: #000;
-			border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            color: #000;
             font-size: 18px;
-            transition: background-color 0.3s;
         }
         .result {
             margin-top: 20px;
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .result-header .card {
+            flex: 1;
+            margin: 0 10px;
         }
         .card {
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 15px;
-            margin-bottom: 10px;
+            box-sizing: border-box;
         }
         .card h2 {
             margin-top: 0;
@@ -105,28 +123,41 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
+<div class="logo">
             <img src="LOGO.png" alt="Logo">
+    <div class="container">
+       <h1>FOOD CAKE GOURMET</h1> 
         </div>
-        <h1>FOOD CAKE GOURMET</h1>
+        <br>
         <form id="calculator">
-            <input type="number" id="numPotes" placeholder="Insira Qtd de Potes" name="numPotes" min="1" required>
+            <div class="form-group">
+                <label for="productSelect">Produto:</label>
+                <select id="productSelect" name="product">
+                    <option value="tapioca">Bolo de Tapioca</option>
+                    <option value="pudim">Pudim</option>
+                    <option value="cenoura">Bolo de Cenoura</option>
+                    <option value="milho">Bolo de Milho</option>
+                </select>
+                <input type="number" id="numPotes" placeholder="Qtd de Potes" name="numPotes" min="1" required>
+            </div>
             <button type="button" onclick="calculate()">Calcular</button>
         </form>
-
+		<br>
+<div class="container">
         <div class="result">
-            <div class="card">
-                <h2>Custo Total</h2>
-                <p id="custoTotal"style="font-size: 25px; color: red;"></p>
-            
-            <div class="divider"></div>
-                <h2>Lucro Total</h2>
-                <p id="lucroTotal" style="font-size: 25px; color: red;"></p>
+            <div class="result-header">
+                <div class="card">
+                    <h2>Custo Total</h2>
+                    <p id="custoTotal" style="font-size: 25px; color: red;"></p>
+                </div>
+                <div class="card">
+                    <h2>Lucro Total</h2>
+                    <p id="lucroTotal" style="font-size: 25px; color: red;"></p>
+                </div>
             </div>
             <div class="divider"></div>
             <div class="card">
-                 <h2>Ingredientes <span id="totalMateriais" style="font-size: 20px; color: red;"></span></h2>
+                <h2>Ingredientes <span id="totalMateriais" style="font-size: 20px; color: red;"></span></h2>
                 <p id="materiaisNecessarios"></p>
                 <div class="divider"></div>
                 <h2>Custos Extras <span id="totalCustosExtras" style="font-size: 20px; color: red;"></span></h2>
@@ -134,37 +165,107 @@
             </div>
         </div>
     </div>
-
+</div>
     <script>
-         function calculate() {
+        function calculate() {
+            const product = document.getElementById('productSelect').value;
             const numPotes = parseInt(document.getElementById('numPotes').value);
 
-            // Dados
-            const custoMateriaisTotal = 59.08;
-            const custoExtrasPorUnidade = 1.03;
-            const receitaTotal = 350.00;
-            const quantidadeBase = 35;
+            let custoMateriaisTotal, custoExtrasPorUnidade, receitaTotal, quantidadeBase;
+
+            let quantidadeMateriais, custosExtras;
+
+            if (product === 'tapioca') {
+                custoMateriaisTotal = 59.08;
+                custoExtrasPorUnidade = 1.03;
+                receitaTotal = 350.00;
+                quantidadeBase = 35;
+
+                quantidadeMateriais = {
+                    leite: { quantidade: 3, precoUnitario: 5.00 },
+                    manteiga: { quantidade: 1, precoUnitario: 3.00 },
+                    massaTapioca: { quantidade: 2, precoUnitario: 11.50 },
+                    cocoSeco: { quantidade: 2, precoUnitario: 3.50 },
+                    açúcar: { quantidade: 0.24, precoUnitario: 4.50 },
+                    cocoRalado: { quantidade: 2, precoUnitario: 5.00 }
+                };
+
+                custosExtras = {
+                    colher: 0.04,
+                    guardanapo: 0.01,
+                    saquinho: 0.02,
+                    pote: 0.77,
+                    etiquetas: 0.09,
+                    sacolinha: 0.03
+                };
+            } else if (product === 'pudim') {
+                custoMateriaisTotal = 33.00;
+                custoExtrasPorUnidade = 0.75;
+                receitaTotal = 180.00;
+                quantidadeBase = 10;
+
+                quantidadeMateriais = {
+                    leiteCondensado: { quantidade: 1, precoUnitario: 6.00 },
+                    cremeDeLeite: { quantidade: 1, precoUnitario: 3.50 },
+                    leite: { quantidade: 0.5, precoUnitario: 4.00 },
+                    gelatina: { quantidade: 0.05, precoUnitario: 1.50 }
+                };
+
+                custosExtras = {
+                    colher: 0.04,
+                    guardanapo: 0.01,
+                    saquinho: 0.02,
+                    pote: 0.77,
+                    etiquetas: 0.09,
+                    sacolinha: 0.03
+                };
+            } else if (product === 'cenoura') {
+                custoMateriaisTotal = 45.00;
+                custoExtrasPorUnidade = 0.85;
+                receitaTotal = 250.00;
+                quantidadeBase = 20;
+
+                quantidadeMateriais = {
+                    cenoura: { quantidade: 2, precoUnitario: 4.00 },
+                    açúcar: { quantidade: 0.5, precoUnitario: 4.00 },
+                    farinha: { quantidade: 0.75, precoUnitario: 3.00 },
+                    óleo: { quantidade: 0.25, precoUnitario: 5.00 },
+                    ovos: { quantidade: 3, precoUnitario: 0.80 }
+                };
+
+                custosExtras = {
+                    colher: 0.04,
+                    guardanapo: 0.01,
+                    saquinho: 0.02,
+                    pote: 0.77,
+                    etiquetas: 0.09,
+                    sacolinha: 0.03
+                };
+            } else if (product === 'milho') {
+                custoMateriaisTotal = 40.00;
+                custoExtrasPorUnidade = 0.80;
+                receitaTotal = 220.00;
+                quantidadeBase = 15;
+
+                quantidadeMateriais = {
+                    milho: { quantidade: 1.5, precoUnitario: 5.00 },
+                    açúcar: { quantidade: 0.4, precoUnitario: 4.00 },
+                    farinha: { quantidade: 0.6, precoUnitario: 3.00 },
+                    leite: { quantidade: 0.5, precoUnitario: 4.00 },
+                    manteiga: { quantidade: 0.2, precoUnitario: 3.00 }
+                };
+
+                custosExtras = {
+                    colher: 0.04,
+                    guardanapo: 0.01,
+                    saquinho: 0.02,
+                    pote: 0.77,
+                    etiquetas: 0.09,
+                    sacolinha: 0.03
+                };
+            }
+
             const precoVendaPorPote = receitaTotal / quantidadeBase;
-
-            // Quantidades dos materiais para 35 potes
-            const quantidadeMateriais = {
-                leite: { quantidade: 3, precoUnitario: 5.00 },
-                manteiga: { quantidade: 1, precoUnitario: 3.00 },
-                massaTapioca: { quantidade: 2, precoUnitario: 11.50 },
-                cocoSeco: { quantidade: 2, precoUnitario: 3.50 },
-                açúcar: { quantidade: 0.24, precoUnitario: 4.50 },
-                cocoRalado: { quantidade: 2, precoUnitario: 5.00 }
-            };
-
-            // Custos extras por unidade
-            const custosExtras = {
-                colher: 0.04,
-                guardanapo: 0.01,
-                saquinho: 0.02,
-                pote: 0.77,
-                etiquetas: 0.09,
-                sacolinha: 0.03
-            };
 
             // Cálculo de custo total
             const custoMateriaisPorPote = custoMateriaisTotal / quantidadeBase;
@@ -175,34 +276,22 @@
             const lucroTotal = (precoVendaPorPote * numPotes) - custoTotal;
 
             // Cálculo da quantidade de materiais necessários
-            const materiaisNecessarios = {
-                leite: (quantidadeMateriais.leite.quantidade / quantidadeBase) * numPotes,
-                manteiga: (quantidadeMateriais.manteiga.quantidade / quantidadeBase) * numPotes,
-                massaTapioca: (quantidadeMateriais.massaTapioca.quantidade / quantidadeBase) * numPotes,
-                cocoSeco: (quantidadeMateriais.cocoSeco.quantidade / quantidadeBase) * numPotes,
-                açúcar: (quantidadeMateriais.açúcar.quantidade / quantidadeBase) * numPotes,
-                cocoRalado: (quantidadeMateriais.cocoRalado.quantidade / quantidadeBase) * numPotes
-            };
+            const materiaisNecessarios = {};
+            for (const [item, info] of Object.entries(quantidadeMateriais)) {
+                materiaisNecessarios[item] = (info.quantidade / quantidadeBase) * numPotes;
+            }
 
             // Cálculo dos custos dos materiais
-            const custosMateriais = {
-                leite: materiaisNecessarios.leite * quantidadeMateriais.leite.precoUnitario,
-                manteiga: materiaisNecessarios.manteiga * quantidadeMateriais.manteiga.precoUnitario,
-                massaTapioca: materiaisNecessarios.massaTapioca * quantidadeMateriais.massaTapioca.precoUnitario,
-                cocoSeco: materiaisNecessarios.cocoSeco * quantidadeMateriais.cocoSeco.precoUnitario,
-                açúcar: materiaisNecessarios.açúcar * quantidadeMateriais.açúcar.precoUnitario,
-                cocoRalado: materiaisNecessarios.cocoRalado * quantidadeMateriais.cocoRalado.precoUnitario
-            };
+            const custosMateriais = {};
+            for (const [item, info] of Object.entries(quantidadeMateriais)) {
+                custosMateriais[item] = materiaisNecessarios[item] * info.precoUnitario;
+            }
 
             // Cálculo dos custos extras
-            const custosExtrasTotal = {
-                colher: custosExtras.colher * numPotes,
-                guardanapo: custosExtras.guardanapo * numPotes,
-                saquinho: custosExtras.saquinho * numPotes,
-                pote: custosExtras.pote * numPotes,
-                etiquetas: custosExtras.etiquetas * numPotes,
-                sacolinha: custosExtras.sacolinha * numPotes
-            };
+            const custosExtrasTotal = {};
+            for (const [item, valor] of Object.entries(custosExtras)) {
+                custosExtrasTotal[item] = valor * numPotes;
+            }
 
             // Total de materiais
             const totalMateriais = Object.values(custosMateriais).reduce((acc, valor) => acc + valor, 0);
@@ -215,28 +304,20 @@
             document.getElementById('lucroTotal').innerText = `R$ ${lucroTotal.toFixed(2)}`;
 
             // Exibir quantidade de materiais necessários e custos
-            document.getElementById('materiaisNecessarios').innerHTML = `
-                <ul>
-                    <li>Leite: ${materiaisNecessarios.leite.toFixed(2)} Litros (Custo: R$ ${custosMateriais.leite.toFixed(2)})</li>
-                    <li>Manteiga: ${materiaisNecessarios.manteiga.toFixed(2)} Unidades (Custo: R$ ${custosMateriais.manteiga.toFixed(2)})</li>
-                    <li>Massa de Tapioca: ${materiaisNecessarios.massaTapioca.toFixed(2)} Pacotes (Custo: R$ ${custosMateriais.massaTapioca.toFixed(2)})</li>
-                    <li>Coco Seco: ${materiaisNecessarios.cocoSeco.toFixed(2)} Pacotes (Custo: R$ ${custosMateriais.cocoSeco.toFixed(2)})</li>
-                    <li>Açúcar: ${materiaisNecessarios.açúcar.toFixed(2)} Kg (Custo: R$ ${custosMateriais.açúcar.toFixed(2)})</li>
-                    <li>Coco Ralado: ${materiaisNecessarios.cocoRalado.toFixed(2)} Pacotes (Custo: R$ ${custosMateriais.cocoRalado.toFixed(2)})</li>
-                </ul>
-            `;
+            let materiaisHTML = '<ul>';
+            for (const [item, valor] of Object.entries(materiaisNecessarios)) {
+                materiaisHTML += `<li>${item.charAt(0).toUpperCase() + item.slice(1).replace(/([A-Z])/g, ' $1')}: ${valor.toFixed(2)} (Custo: R$ ${custosMateriais[item].toFixed(2)})</li>`;
+            }
+            materiaisHTML += '</ul>';
+            document.getElementById('materiaisNecessarios').innerHTML = materiaisHTML;
 
             // Exibir custos extras
-            document.getElementById('custosExtras').innerHTML = `
-                <ul>
-                    <li>Colher Descartável: R$ ${custosExtrasTotal.colher.toFixed(2)}</li>
-                    <li>Guardanapo: R$ ${custosExtrasTotal.guardanapo.toFixed(2)}</li>
-                    <li>Saquinho Plástico: R$ ${custosExtrasTotal.saquinho.toFixed(2)}</li>
-                    <li>Pote: R$ ${custosExtrasTotal.pote.toFixed(2)}</li>
-                    <li>Etiquetas: R$ ${custosExtrasTotal.etiquetas.toFixed(2)}</li>
-                    <li>Sacolinha Plástica: R$ ${custosExtrasTotal.sacolinha.toFixed(2)}</li>
-                </ul>
-            `;
+            let custosExtrasHTML = '<ul>';
+            for (const [item, valor] of Object.entries(custosExtrasTotal)) {
+                custosExtrasHTML += `<li>${item.charAt(0).toUpperCase() + item.slice(1).replace(/([A-Z])/g, ' $1')}: R$ ${valor.toFixed(2)}</li>`;
+            }
+            custosExtrasHTML += '</ul>';
+            document.getElementById('custosExtras').innerHTML = custosExtrasHTML;
 
             // Exibir totais
             document.getElementById('totalMateriais').innerText = `Total: R$ ${totalMateriais.toFixed(2)}`;
